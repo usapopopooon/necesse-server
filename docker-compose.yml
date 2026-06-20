@@ -1,0 +1,40 @@
+services:
+  necesse:
+    build: .
+    platform: linux/amd64
+    restart: unless-stopped
+    mem_limit: ${MEMORY_LIMIT:-1536m}
+    cpus: ${CPU_LIMIT:-1.0}
+    deploy:
+      resources:
+        limits:
+          memory: ${MEMORY_LIMIT:-1536m}
+          cpus: ${CPU_LIMIT:-1.0}
+    environment:
+      WORLD_NAME: ${WORLD_NAME:?Set WORLD_NAME in Coolify}
+      SERVER_PORT: ${SERVER_PORT:-14159}
+      SERVER_SLOTS: ${SERVER_SLOTS:-5}
+      SERVER_PASSWORD: ${SERVER_PASSWORD:-}
+      SERVER_OWNER: ${SERVER_OWNER:-}
+      SERVER_MOTD: ${SERVER_MOTD:-}
+      PAUSE_WHEN_EMPTY: ${PAUSE_WHEN_EMPTY:-1}
+      GIVE_CLIENTS_POWER: ${GIVE_CLIENTS_POWER:-0}
+      SERVER_LOGGING: ${SERVER_LOGGING:-1}
+      ZIP_SAVES: ${ZIP_SAVES:-1}
+      JVM_XMS: ${JVM_XMS:-256M}
+      JVM_XMX: ${JVM_XMX:-1024M}
+      JAVA_OPTS: ${JAVA_OPTS:-}
+      AUTO_UPDATE: ${AUTO_UPDATE:-1}
+      SERVER_DOWNLOAD_PAGE: ${SERVER_DOWNLOAD_PAGE:-https://necessegame.com/server/}
+      SERVER_DOWNLOAD_URL: ${SERVER_DOWNLOAD_URL:-}
+      EXTRA_ARGS: ${EXTRA_ARGS:-}
+    ports:
+      - "${SERVER_PORT:-14159}:${SERVER_PORT:-14159}/udp"
+    volumes:
+      - necesse-server-files:/opt/necesse/server
+      - necesse-data:/home/necesse/.config/Necesse
+    stop_grace_period: 2m
+
+volumes:
+  necesse-server-files:
+  necesse-data:
