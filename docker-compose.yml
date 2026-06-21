@@ -35,6 +35,15 @@ services:
       - necesse-data:/home/necesse/.config/Necesse
     stop_grace_period: 2m
 
+  playit:
+    image: ghcr.io/playit-cloud/playit-agent:0.17
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      - necesse
+    environment:
+      SECRET_KEY: ${PLAYIT_SECRET_KEY:?Set PLAYIT_SECRET_KEY in Coolify}
+
 volumes:
   necesse-server-files:
   necesse-data:
