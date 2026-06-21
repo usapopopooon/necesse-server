@@ -21,11 +21,48 @@ Coolify's HTTP proxy is not used for this server. Necesse clients connect to
 the server IP/domain and UDP port, default `14159`. You normally do not need to
 assign a domain in Coolify for this service.
 
+## Optional VPS Tunnel
+
+When home IPv4 port forwarding is not available, enable the bundled WireGuard
+client sidecar and publish the server through a VPS relay.
+
+1. Generate a single-line base64 value from the VPS-generated WireGuard client
+   config.
+
+```sh
+base64 -i data/home-wireguard/wg_confs/wg0.conf | tr -d '\n'
+```
+
+On Linux, use:
+
+```sh
+base64 -w0 data/home-wireguard/wg_confs/wg0.conf
+```
+
+2. Set these Coolify environment variables.
+
+```text
+COMPOSE_PROFILES=vps-tunnel
+WG0_CONF_B64=<base64 output>
+WG_INTERFACE=wg0
+```
+
+The `vps-tunnel` service runs in host network mode and uses `privileged: true`
+so it can create the WireGuard interface and set the required host sysctl at
+container startup. The WireGuard config is stored in the
+`necesse-wireguard-client` Docker volume and is not committed to git.
+
 ## Environment Variables
 
 | Variable | Default | Description |
 | --- | --- | --- |
 | `WORLD_NAME` | required | World/save name to load or create. |
+| `COMPOSE_PROFILES` | empty | Set to `vps-tunnel` to start the bundled WireGuard client sidecar. |
+| `WG0_CONF_B64` | empty | Base64-encoded WireGuard `wg0.conf`, required when `COMPOSE_PROFILES=vps-tunnel`. |
+| `WG_INTERFACE` | `wg0` | WireGuard interface name used by the sidecar. |
+| `PUID` | `1000` | User id passed to the WireGuard sidecar. |
+| `PGID` | `1000` | Group id passed to the WireGuard sidecar. |
+| `TZ` | `Asia/Tokyo` | Time zone passed to the WireGuard sidecar. |
 | `MEMORY_LIMIT` | `1536m` | Container memory limit, tuned to be frugal for about 5 players. |
 | `CPU_LIMIT` | `1.0` | Container CPU limit. |
 | `SERVER_PORT` | `14159` | UDP port used inside and outside the container. |

@@ -1,4 +1,27 @@
 services:
+  vps-tunnel:
+    profiles:
+      - vps-tunnel
+    build:
+      context: .
+      dockerfile: tunnel/wireguard/Dockerfile
+    platform: linux/amd64
+    network_mode: host
+    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      PUID: ${PUID:-1000}
+      PGID: ${PGID:-1000}
+      TZ: ${TZ:-Asia/Tokyo}
+      INTERFACE: ${WG_INTERFACE:-wg0}
+      WG0_CONF_B64: ${WG0_CONF_B64:-}
+    volumes:
+      - necesse-wireguard-client:/config
+      - /lib/modules:/lib/modules:ro
+    restart: unless-stopped
+
   necesse:
     build: .
     platform: linux/amd64
@@ -36,5 +59,6 @@ services:
     stop_grace_period: 2m
 
 volumes:
+  necesse-wireguard-client:
   necesse-server-files:
   necesse-data:
