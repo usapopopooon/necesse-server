@@ -1,3 +1,8 @@
+x-coolify-env:
+  COMPOSE_PROFILES: ${COMPOSE_PROFILES:-}
+  WG_INTERFACE: ${WG_INTERFACE:-}
+  WG0_CONF_B64: ${WG0_CONF_B64:-}
+
 services:
   vps-tunnel:
     profiles:
