@@ -33,6 +33,12 @@ client sidecar and publish the server through a VPS relay.
 base64 -i data/home-wireguard/wg_confs/wg0.conf | tr -d '\n'
 ```
 
+To copy it directly to the macOS clipboard:
+
+```sh
+base64 -i data/home-wireguard/wg_confs/wg0.conf | tr -d '\n' | pbcopy
+```
+
 On Linux, use:
 
 ```sh
@@ -46,6 +52,9 @@ COMPOSE_PROFILES=vps-tunnel
 WG0_CONF_B64=<base64 output>
 WG_INTERFACE=wg0
 ```
+
+Paste only the base64 output into `WG0_CONF_B64`. Do not include quotes,
+angle brackets, the command itself, or explanatory text.
 
 The `vps-tunnel` service runs in host network mode and uses `privileged: true`
 so it can create the WireGuard interface and set the required host sysctl at
