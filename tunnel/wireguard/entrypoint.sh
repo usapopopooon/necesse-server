@@ -2,6 +2,7 @@
 set -eu
 
 WG_CONF_PATH="/config/wg_confs/wg0.conf"
+WG_PERSISTENT_KEEPALIVE="${WG_PERSISTENT_KEEPALIVE:-25}"
 
 if [ -n "${WG0_CONF_B64:-}" ]; then
   mkdir -p "$(dirname "$WG_CONF_PATH")"
@@ -21,6 +22,10 @@ if [ -n "${WG0_CONF_B64:-}" ]; then
     rm -f "$tmp_conf"
     echo "Decoded WireGuard config is invalid. It must contain [Interface] and [Peer] sections." >&2
     exit 1
+  fi
+
+  if [ -n "$WG_PERSISTENT_KEEPALIVE" ] && ! grep -qi '^PersistentKeepalive[[:space:]]*=' "$tmp_conf"; then
+    printf '\nPersistentKeepalive = %s\n' "$WG_PERSISTENT_KEEPALIVE" >> "$tmp_conf"
   fi
 
   mv "$tmp_conf" "$WG_CONF_PATH"

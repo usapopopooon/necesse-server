@@ -2,6 +2,7 @@ x-coolify-env:
   COMPOSE_PROFILES: ${COMPOSE_PROFILES:-}
   WG_INTERFACE: ${WG_INTERFACE:-}
   WG0_CONF_B64: ${WG0_CONF_B64:-}
+  WG_PERSISTENT_KEEPALIVE: ${WG_PERSISTENT_KEEPALIVE:-}
 
 services:
   vps-tunnel:
@@ -22,6 +23,7 @@ services:
       TZ: ${TZ:-Asia/Tokyo}
       INTERFACE: ${WG_INTERFACE:-wg0}
       WG0_CONF_B64: ${WG0_CONF_B64:-}
+      WG_PERSISTENT_KEEPALIVE: ${WG_PERSISTENT_KEEPALIVE:-25}
     volumes:
       - necesse-wireguard-client:/config
       - /lib/modules:/lib/modules:ro

@@ -51,6 +51,7 @@ base64 -w0 data/home-wireguard/wg_confs/wg0.conf
 COMPOSE_PROFILES=vps-tunnel
 WG0_CONF_B64=<base64 output>
 WG_INTERFACE=wg0
+WG_PERSISTENT_KEEPALIVE=25
 ```
 
 Paste only the base64 output into `WG0_CONF_B64`. Do not include quotes,
@@ -69,6 +70,7 @@ container startup. The WireGuard config is stored in the
 | `COMPOSE_PROFILES` | empty | Set to `vps-tunnel` to start the bundled WireGuard client sidecar. |
 | `WG0_CONF_B64` | empty | Base64-encoded WireGuard `wg0.conf`, required when `COMPOSE_PROFILES=vps-tunnel`. |
 | `WG_INTERFACE` | `wg0` | WireGuard interface name used by the sidecar. |
+| `WG_PERSISTENT_KEEPALIVE` | `25` | Adds WireGuard `PersistentKeepalive` to the client peer config when missing. |
 | `PUID` | `1000` | User id passed to the WireGuard sidecar. |
 | `PGID` | `1000` | Group id passed to the WireGuard sidecar. |
 | `TZ` | `Asia/Tokyo` | Time zone passed to the WireGuard sidecar. |
